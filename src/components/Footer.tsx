@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Twitter, Mail, Heart, ArrowUp } from 'lucide-react';
+import { Github, Linkedin, Mail, Heart, ArrowUp } from 'lucide-react';
 
 export default function Footer() {
   const [isVisible, setIsVisible] = useState(false);
@@ -22,10 +22,10 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { icon: Github, href: "#", label: "GitHub", color: "hover:text-gray-300" },
-    { icon: Linkedin, href: "#", label: "LinkedIn", color: "hover:text-blue-400" },
-    { icon: Twitter, href: "#", label: "Twitter", color: "hover:text-blue-300" },
-    { icon: Mail, href: "mailto:abhijeet@example.com", label: "Email", color: "hover:text-red-400" }
+    { icon: Github, href: "https://github.com/Abhijeet002", label: "GitHub", color: "hover:text-gray-300" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/abhijeet-sachan/", label: "LinkedIn", color: "hover:text-blue-400" },
+    // { icon: Twitter, href: "#", label: "Twitter", color: "hover:text-blue-300" },
+    { icon: Mail, href: "mailto:helpmeabhijeet@gmail.com", label: "Email", color: "hover:text-red-400" }
   ];
 
   return (
@@ -59,7 +59,7 @@ export default function Footer() {
             </h3>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
               Crafting digital experiences with passion and precision. 
-              Let's build something amazing together.
+              Let&#39;s build something amazing together.
             </p>
           </div>
 

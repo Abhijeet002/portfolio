@@ -28,8 +28,8 @@ const navItems = [
 ];
 
 const socialLinks = [
-  { href: "https://github.com/yourusername", icon: Github, label: "GitHub" },
-  { href: "https://linkedin.com/in/yourusername", icon: Linkedin, label: "LinkedIn" },
+  { href: "https://github.com/Abhijeet002", icon: Github, label: "GitHub" },
+  { href: "https://www.linkedin.com/in/abhijeet-sachan/", icon: Linkedin, label: "LinkedIn" },
 ];
 
 export default function Navbar() {
@@ -251,7 +251,7 @@ export default function Navbar() {
                 href="/contact"
                 className="relative px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 overflow-hidden group"
               >
-                <span className="relative z-10">Let's Talk</span>
+                <span className="relative z-10">Let&#39;s Talk</span>
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 />
@@ -307,7 +307,7 @@ export default function Navbar() {
               className="md:hidden overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-lg border border-gray-200 dark:border-gray-700 my-2"
             >
               <div className="px-4 py-6 space-y-4">
-                {navItems.map((item, index) => {
+                {navItems.map((item) => {
                   const Icon = item.icon;
                   return (
                     <motion.div key={item.href} variants={itemVariants}>
@@ -360,7 +360,7 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className="block w-full text-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    Let's Talk
+                    Let&#39;s Talk
                   </Link>
                 </motion.div>
               </div>

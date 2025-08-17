@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, AnimatePresence, Variants } from "framer-motion";
+import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -46,13 +46,13 @@ const EXPERIENCES: Experience[] = [
     ],
   },
   {
-    period: "2024",
-    role: "Software Engineer Intern",
-    company: "Your Previous Company",
+    period: "Apr-Jul 2024",
+    role: "Full stack developer Intern",
+    company: "Srstha Tech solution",
     icon: <Zap className="w-5 h-5" />,
     bullets: [
-      "Developed reusable React + Tailwind components, improving Lighthouse scores by 25%.",
-      "Wrote comprehensive integration tests and refined CI workflows, reducing deployment time by 60%.",
+      "Optimized web application performance using React.js, Node.js, and Express.js, achieving 40% faster load times and improved system scalability for 500+ concurrent users.",
+      "Designed responsive web interfaces using HTML5, CSS3, and JavaScript, enhancing UI/UX design and boosting user engagement by 30% across mobile and desktop platforms.",
     ],
   },
   {
@@ -61,8 +61,8 @@ const EXPERIENCES: Experience[] = [
     company: "Manipal University Jaipur",
     icon: <Users className="w-5 h-5" />,
     bullets: [
-      "Graduated with a strong foundation in software engineering and data analysis (CGPA: 8.5/10).",
-      "Built 15+ web projects and led a team of 4 developers in hackathons with 2 winning projects.",
+      "Graduated with a Electronics degree specialization in Communication (CGPA: 8.32/10).",
+      "Built 5+ web projects and learnt various technologies including React, Node.js, and MongoDB.",
     ],
   },
 ];
@@ -82,22 +82,22 @@ const PROJECTS: Project[] = [
     tech: ["React", "Node.js", "Express", "MongoDB"],
     img: "/projects/helpme.jpg",
     href: "#",
-    github: "#"
+    github: "https://github.com/Abhijeet002/HelpMe-AI-Powered-Support-Ticket-System"
   },
   {
     title: "Virtuale",
     description: "Virtual reality meeting platform with spatial audio and immersive collaboration tools.",
     tech: ["Three.js", "WebRTC", "Node.js", "Socket.io"],
     img: "/projects/virtuale.jpg",
-    href: "#",
-    github: "#"
+    href: "https://virtuale-xi.vercel.app/",
+    github: "https://github.com/Abhijeet002/Virtuale--Video-calling-app"
   },
 ];
 
 const SKILLS = [
   { name: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },
-  { name: "Backend", items: ["Node.js", "Python", "PostgreSQL", "Redis"] },
-  { name: "Tools", items: ["Git", "Docker", "AWS", "Figma"] },
+  { name: "Backend", items: ["Node.js", "Python", "PostgreSQL", "Express.js", "socket.io", "MongoDB"] },
+  { name: "Tools", items: ["Git", "Azure", "Figma"] },
 ];
 
 // Custom hooks and animations
@@ -306,9 +306,9 @@ export default function HomePage() {
                 className="flex items-center justify-center md:justify-start gap-6"
               >
                 {[
-                  { Icon: Github, href: "#", label: "GitHub" },
-                  { Icon: Linkedin, href: "#", label: "LinkedIn" },
-                  { Icon: Mail, href: "mailto:youremail@example.com", label: "Email" },
+                  { Icon: Github, href: "https://github.com/Abhijeet002", label: "GitHub" },
+                  { Icon: Linkedin, href: "https://www.linkedin.com/in/abhijeet-sachan/", label: "LinkedIn" },
+                  { Icon: Mail, href: "mailto:helpmeabhijeet@gmail.com", label: "Email" },
                 ].map(({ Icon, href, label }) => (
                   <motion.a
                     key={label}
@@ -399,7 +399,7 @@ export default function HomePage() {
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 text-center">
             {SKILLS.map((skill, index) => (
               <motion.div
                 key={skill.name}
@@ -407,14 +407,14 @@ export default function HomePage() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <GlowingCard className="p-8 h-full">
+                <GlowingCard className="p-0 h-full">
                   <div className="mb-6">
                     {skill.name === "Frontend" && <Palette className="w-12 h-12 mx-auto text-indigo-400" />}
                     {skill.name === "Backend" && <Code className="w-12 h-12 mx-auto text-purple-400" />}
                     {skill.name === "Tools" && <Zap className="w-12 h-12 mx-auto text-pink-400" />}
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{skill.name}</h3>
-                  <div className="flex flex-wrap justify-center gap-2">
+                  <div className="flex flex-wrap justify-center gap-2 p-5">
                     {skill.items.map((item) => (
                       <span
                         key={item}
@@ -608,7 +608,7 @@ export default function HomePage() {
               className="flex flex-col sm:flex-row items-center justify-center gap-6"
             >
               <motion.a
-                href="mailto:youremail@example.com"
+                href="mailto:helpmeabhijeet@gmail.com"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-indigo-500/25 flex items-center gap-3"

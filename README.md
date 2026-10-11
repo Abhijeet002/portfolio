@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Abhijeet Sachan – Portfolio
 
-## Getting Started
+Personal portfolio built with Next.js (App Router), TypeScript, Tailwind CSS and Framer Motion.
 
-First, run the development server:
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script              | What it does                     |
+| ------------------- | -------------------------------- |
+| `npm run dev`       | Start the dev server             |
+| `npm run build`     | Production build                 |
+| `npm run lint`      | ESLint                           |
+| `npm run typecheck` | TypeScript, no emit              |
+| `npm test`          | Unit tests (Vitest)              |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Editing content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All content lives in plain data files, so updating the site never means touching layout code:
 
-## Learn More
+| What                         | Where                          |
+| ---------------------------- | ------------------------------ |
+| Name, email, social links    | `src/config/site.ts`           |
+| Experience & education       | `src/data/experience.ts`       |
+| Projects                     | `src/data/projects.ts`         |
+| Skills                       | `src/data/skills.ts`           |
+| Certifications               | `src/data/certifications.ts`   |
 
-To learn more about Next.js, take a look at the following resources:
+## Blog (dev.to)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`/blog` and the home page "Latest Articles" section pull published posts from the
+[dev.to API](https://developers.forem.com/api/v1) for the username in `src/config/site.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Fetched on the server and cached for an hour (ISR), so new posts appear without a redeploy.
+- Responses are validated at runtime; malformed posts are skipped and only `http(s)` links are rendered.
+- If dev.to is unreachable, `/blog` shows a friendly fallback and the home page section is hidden.
 
-## Deploy on Vercel
+### Environment variables (optional)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Variable               | Purpose                                                        |
+| ---------------------- | -------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL, used for Open Graph metadata               |
+| `DEVTO_API_URL`        | Override the dev.to API base (e.g. a local mock for testing)   |

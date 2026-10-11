@@ -4,33 +4,36 @@ import { MotionConfig, motion } from "framer-motion";
 import { Briefcase, GraduationCap, MapPin } from "lucide-react";
 import GlowingCard from "./GlowingCard";
 import type { TimelineEntry, TimelineKind } from "@/data/experience";
+import { formatYearMonth } from "@/lib/date";
 
 const KIND_ICON: Record<TimelineKind, typeof Briefcase> = {
   work: Briefcase,
   education: GraduationCap,
 };
 
-const monthFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-function formatMonth(isoMonth: string) {
-  return monthFormatter.format(new Date(`${isoMonth}-01T00:00:00Z`));
-}
-
 function DateRange({ start, end }: Pick<TimelineEntry, "start" | "end">) {
   return (
     <span>
-      <time dateTime={start}>{formatMonth(start)}</time>
+      <time dateTime={start}>{formatYearMonth(start)}</time>
       {" – "}
-      {end ? <time dateTime={end}>{formatMonth(end)}</time> : "Present"}
+      {end ? <time dateTime={end}>{formatYearMonth(end)}</time> : "Present"}
     </span>
   );
 }
 
-export default function ExperienceTimeline({ items }: { items: TimelineEntry[] }) {
+type ExperienceTimelineProps = {
+  items: TimelineEntry[];
+  /** Heading level for each entry's role, so the timeline nests correctly in the page outline. */
+  headingLevel?: "h2" | "h3";
+};
+
+export default function ExperienceTimeline({ items, headingLevel = "h3" }: ExperienceTimelineProps) {
+  const Heading = headingLevel;
+
+  if (items.length === 0) {
+    return <p className="text-center text-gray-400">Nothing to show yet.</p>;
+  }
+
   return (
     // Respect the OS "reduce motion" setting for every animation in the timeline.
     <MotionConfig reducedMotion="user">
@@ -65,7 +68,7 @@ export default function ExperienceTimeline({ items }: { items: TimelineEntry[] }
                   <article className="p-5 md:p-6">
                     <header className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-4">
                       <div className="min-w-0">
-                        <h3 className="text-xl md:text-2xl font-bold text-white">{item.role}</h3>
+                        <Heading className="text-xl md:text-2xl font-bold text-white">{item.role}</Heading>
                         <p className="text-indigo-300 font-medium">
                           {item.organization}
                           {item.product && (

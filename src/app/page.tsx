@@ -13,17 +13,11 @@ import {
   Download,
   Code,
   Palette,
-  Zap,
-  Users
+  Zap
 } from "lucide-react";
-
-type Experience = {
-  period: string;
-  role: string;
-  company: string;
-  bullets: string[];
-  icon: React.ReactNode;
-};
+import GlowingCard from "@/components/GlowingCard";
+import ExperienceTimeline from "@/components/ExperienceTimeline";
+import { EXPERIENCE } from "@/data/experience";
 
 type Project = {
   title: string;
@@ -33,39 +27,6 @@ type Project = {
   href: string;
   github?: string;
 };
-
-const EXPERIENCES: Experience[] = [
-  {
-    period: "2025 — Present",
-    role: "Full-Stack Developer",
-    company: "Your Current Company",
-    icon: <Code className="w-5 h-5" />,
-    bullets: [
-      "Building end-to-end features with Next.js, Node.js, and PostgreSQL with 40% performance improvement.",
-      "Collaborating with design/product teams to ship user-centric, accessible UIs reaching 10k+ users.",
-    ],
-  },
-  {
-    period: "Apr-Jul 2024",
-    role: "Full stack developer Intern",
-    company: "Srstha Tech solution",
-    icon: <Zap className="w-5 h-5" />,
-    bullets: [
-      "Optimized web application performance using React.js, Node.js, and Express.js, achieving 40% faster load times and improved system scalability for 500+ concurrent users.",
-      "Designed responsive web interfaces using HTML5, CSS3, and JavaScript, enhancing UI/UX design and boosting user engagement by 30% across mobile and desktop platforms.",
-    ],
-  },
-  {
-    period: "2020 — 2024",
-    role: "B.Tech, Electronics & Communication",
-    company: "Manipal University Jaipur",
-    icon: <Users className="w-5 h-5" />,
-    bullets: [
-      "Graduated with a Electronics degree specialization in Communication (CGPA: 8.32/10).",
-      "Built 5+ web projects and learnt various technologies including React, Node.js, and MongoDB.",
-    ],
-  },
-];
 
 const PROJECTS: Project[] = [
   {
@@ -172,25 +133,6 @@ const ParticleBackground = () => {
 //     </AnimatePresence>
 //   );
 // };
-
-const GlowingCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className={`relative group ${className}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-    >
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-sm" />
-      <div className={`relative bg-gray-900/50 backdrop-blur-sm border border-white/10 rounded-xl ${isHovered ? 'border-indigo-500/50' : ''} transition-all duration-300`}>
-        {children}
-      </div>
-    </motion.div>
-  );
-};
 
 const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
   const [displayText, setDisplayText] = useState("");
@@ -521,62 +463,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="relative">
-            {/* Enhanced Timeline */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500" />
-            
-            <div className="space-y-12">
-              {EXPERIENCES.map((item, idx) => (
-                <motion.div
-                  key={`${item.period}-${idx}`}
-                  variants={fadeUp}
-                  transition={{ delay: idx * 0.1 }}
-                  className="relative pl-20"
-                >
-                  {/* Enhanced Node */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 500, delay: idx * 0.1 }}
-                    className="absolute left-5 top-2 w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full ring-4 ring-indigo-500/20 shadow-lg flex items-center justify-center"
-                  >
-                    <div className="text-white text-xs">
-                      {item.icon}
-                    </div>
-                  </motion.div>
-
-                  <GlowingCard>
-                    <div className="p-6">
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                        <div>
-                          <span className="inline-block px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-sm mb-2">
-                            {item.period}
-                          </span>
-                          <h3 className="text-2xl font-bold text-white">{item.role}</h3>
-                          <p className="text-indigo-300 font-medium">{item.company}</p>
-                        </div>
-                      </div>
-
-                      <ul className="space-y-3">
-                        {item.bullets.map((bullet, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: (idx * 0.1) + (i * 0.05) }}
-                            className="flex items-start gap-3 text-gray-300"
-                          >
-                            <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full mt-2 flex-shrink-0" />
-                            <span>{bullet}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-                  </GlowingCard>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <ExperienceTimeline items={EXPERIENCE} />
         </motion.section>
 
         {/* Contact Section */}

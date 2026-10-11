@@ -9,7 +9,7 @@ import { SITE } from "@/config/site";
 export const metadata: Metadata = {
   title: "Experience",
   description:
-    "Abhijeet Sachan's professional experience: Frontend Developer at Stack-It building Nestys, and Web Developer at Srstha Tech Solutions.",
+    "Abhijeet Sachan's professional experience: Software Engineer at Stack-IT building Nestys, and Associate Web Developer at Srstha Tech Solutions.",
 };
 
 export default function ExperiencePage() {

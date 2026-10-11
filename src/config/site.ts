@@ -6,8 +6,8 @@
 export const SITE = {
   name: "Abhijeet Sachan",
   shortName: "Abhijeet",
-  role: "Full Stack Developer",
-  tagline: "Frontend-focused full stack developer building fast, accessible, scalable web apps.",
+  role: "Software Engineer",
+  tagline: "Software engineer building large-scale, full-stack web apps with React, Next.js and Node.js.",
   location: "Noida, India",
   email: "abhijeetsachanwork@gmail.com",
   resumePath: "/Abhijeet_Resume.pdf",

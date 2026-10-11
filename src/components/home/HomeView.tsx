@@ -10,18 +10,21 @@ import {
   Github, 
   Linkedin, 
   Mail, 
-  Download,
-  Code,
-  Palette,
-  Zap
+  Download
 } from "lucide-react";
 import GlowingCard from "@/components/GlowingCard";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ProjectCard from "@/components/ProjectCard";
 import { EXPERIENCE } from "@/data/experience";
 import { FEATURED_PROJECTS } from "@/data/projects";
-import { SKILL_GROUPS } from "@/data/skills";
+import { SKILL_GROUPS, type SkillGroupId } from "@/data/skills";
+import { SKILL_ICONS } from "@/components/skillIcons";
 import { SITE, SOCIAL_LINKS } from "@/config/site";
+
+const SkillIcon = ({ id }: { id: SkillGroupId }) => {
+  const Icon = SKILL_ICONS[id];
+  return <Icon aria-hidden="true" className="w-12 h-12 mx-auto text-indigo-400" />;
+};
 
 type Particle = { left: number; top: number; dx: number; dy: number; duration: number; delay: number };
 
@@ -289,10 +292,8 @@ export default function HomeView({ latestArticles }: HomeViewProps) {
                 className="text-center"
               >
                 <GlowingCard className="p-0 h-full">
-                  <div className="mb-6">
-                    {skill.name === "Frontend" && <Palette className="w-12 h-12 mx-auto text-indigo-400" />}
-                    {skill.name === "Backend" && <Code className="w-12 h-12 mx-auto text-purple-400" />}
-                    {skill.name === "Tools" && <Zap className="w-12 h-12 mx-auto text-pink-400" />}
+                  <div className="pt-8 mb-6">
+                    <SkillIcon id={skill.id} />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">{skill.name}</h3>
                   <div className="flex flex-wrap justify-center gap-2 p-5">

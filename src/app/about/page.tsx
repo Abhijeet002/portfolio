@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Award, Briefcase, Code2, Download, GraduationCap, MapPin, Palette, Wrench } from "lucide-react";
+import { Award, Briefcase, Download, GraduationCap, MapPin } from "lucide-react";
 import PageShell from "@/components/PageShell";
 import PageHeader from "@/components/PageHeader";
 import GlowingCard from "@/components/GlowingCard";
 import Reveal from "@/components/Reveal";
 import { SITE } from "@/config/site";
 import { CURRENT_ROLE, EXPERIENCE, WORK_EXPERIENCE } from "@/data/experience";
-import { SKILL_GROUPS, type SkillGroupId } from "@/data/skills";
+import { SKILL_GROUPS } from "@/data/skills";
+import { SKILL_ICONS } from "@/components/skillIcons";
 import { CERTIFICATIONS } from "@/data/certifications";
 import { formatDuration, monthsInRange } from "@/lib/date";
 
@@ -19,12 +20,6 @@ export const metadata: Metadata = {
 
 // Experience length is derived from today's date, so re-render the static page daily.
 export const revalidate = 86400;
-
-const SKILL_ICON: Record<SkillGroupId, typeof Palette> = {
-  frontend: Palette,
-  backend: Code2,
-  tools: Wrench,
-};
 
 const PRINCIPLES = [
   {
@@ -86,27 +81,27 @@ export default function AboutPage() {
             My story
           </h2>
           <p>
-            I&apos;m a self-driven full stack developer with a strong focus on the frontend. I enjoy building
-            scalable, real-world applications with React, Next.js, Node.js, PostgreSQL and MongoDB, and I care
-            about the details that make a product feel fast and effortless to use.
+            I&apos;m a software engineer who builds large-scale, full-stack web applications with React, Next.js
+            and Node.js. I care about clean, maintainable code, reliable systems, and the details that make a product
+            feel fast and effortless to use.
           </p>
           <p>
             {CURRENT_ROLE ? (
               <>
-                Right now I&apos;m the frontend developer behind{" "}
+                Right now I own the frontend architecture of{" "}
                 <span className="font-semibold text-white">{CURRENT_ROLE.product ?? CURRENT_ROLE.organization}</span>{" "}
-                at {CURRENT_ROLE.organization}, a platform that brings social networking, professional collaboration
-                and business discovery into one ecosystem.
+                at {CURRENT_ROLE.organization}, a social commerce platform with a social feed, e-commerce, real-time
+                chat, short video and a wallet.
               </>
             ) : (
               <>I&apos;m currently open to new frontend and full stack roles.</>
             )}{" "}
             Outside of work I build side projects like a blog platform, a real-time support ticket system and a
-            video calling app, and I write about what I learn.
+            video conferencing app, and I write about what I learn.
           </p>
           <p>
-            I studied Electronics and Communication Engineering at Manipal University Jaipur, which gave me a solid
-            foundation in problem-solving that I now apply to the web.
+            I studied Electronics and Communication Engineering at Manipal University Jaipur, with coursework in data
+            structures and algorithms, object-oriented programming, databases and operating systems.
           </p>
         </Reveal>
       </section>
@@ -151,7 +146,7 @@ export default function AboutPage() {
         </h2>
         <ul className="grid gap-6 md:grid-cols-3">
           {SKILL_GROUPS.map((group, index) => {
-            const Icon = SKILL_ICON[group.id];
+            const Icon = SKILL_ICONS[group.id];
             return (
               <Reveal key={group.id} as="li" delay={index * 0.08}>
                 <GlowingCard className="h-full">

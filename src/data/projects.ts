@@ -17,8 +17,8 @@ export const PROJECTS: Project[] = [
     id: "echoes-and-edits",
     title: "Echoes & Edits",
     description:
-      "A modern blog platform with real-time collaboration features and AI-powered content suggestions.",
-    tech: ["Next.js", "TypeScript", "Prisma", "Supabase"],
+      "A full-stack blogging platform with JWT authentication, role-based access control and responsive design, backed by a REST API that handles 10,000+ posts with optimized queries.",
+    tech: ["React.js", "Node.js", "Express.js", "MySQL", "JWT"],
     image: "/projects/echoesandedits.jpg",
     liveUrl: "https://blog-app-three-topaz.vercel.app/",
     repoUrl: "https://github.com/Abhijeet002/Blog-app",
@@ -38,8 +38,8 @@ export const PROJECTS: Project[] = [
     id: "virtuale",
     title: "Virtuale",
     description:
-      "Virtual reality meeting platform with spatial audio and immersive collaboration tools.",
-    tech: ["Three.js", "WebRTC", "Node.js", "Socket.io"],
+      "A real-time video conferencing platform for 50+ participants, using WebRTC for peer-to-peer calls and Socket.io for chat and signaling, with scheduling, screen sharing and personal rooms.",
+    tech: ["Next.js", "TypeScript", "WebRTC", "Socket.io"],
     image: "/projects/virtuale.jpg",
     liveUrl: "https://virtuale-xi.vercel.app/",
     repoUrl: "https://github.com/Abhijeet002/Virtuale--Video-calling-app",

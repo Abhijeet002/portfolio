@@ -1,387 +1,237 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { 
-  Menu, 
-  X, 
-  Home, 
-  User, 
-  FolderOpen, 
-  Briefcase, 
-  FileText, 
-  Mail,
-  Sun,
-  Moon,
-  Github,
-  Linkedin
-} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { Github, Linkedin, Menu, X } from "lucide-react";
+import { NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/config/site";
 
-const navItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/about", label: "About", icon: User },
-  { href: "/projects", label: "Projects", icon: FolderOpen },
-  { href: "/experience", label: "Experience", icon: Briefcase },
-  { href: "/blog", label: "Blog", icon: FileText },
-  { href: "/contact", label: "Contact", icon: Mail },
-];
+const SOCIALS = [
+  { href: SOCIAL_LINKS.github, label: "GitHub", icon: Github },
+  { href: SOCIAL_LINKS.linkedin, label: "LinkedIn", icon: Linkedin },
+] as const;
 
-const socialLinks = [
-  { href: "https://github.com/Abhijeet002", icon: Github, label: "GitHub" },
-  { href: "https://www.linkedin.com/in/abhijeet-sachan/", icon: Linkedin, label: "LinkedIn" },
-];
+const MOBILE_MENU_ID = "mobile-navigation";
+
+/** "/" only matches exactly; other routes also match their nested paths (e.g. /blog/x). */
+function isActivePath(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export default function Navbar() {
+  const pathname = usePathname() ?? "/";
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("/");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
 
-  // Handle scroll effect
+  const closeMenu = useCallback(() => setIsOpen(false), []);
+
+  // Solid background once the page scrolls, so the bar stays legible over any content.
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Navigating away always closes the mobile menu.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Close the menu when the viewport grows past the mobile breakpoint.
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 1024px)");
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsOpen(false);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
   }, []);
 
-  // Handle dark mode
+  // While the mobile menu is open: lock page scroll, close on Escape, move focus into the menu.
   useEffect(() => {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    setIsDark(isDarkMode);
-    document.documentElement.classList.toggle("dark", isDarkMode);
-  }, []);
+    if (!isOpen) return;
 
-  const toggleDarkMode = () => {
-    const newDarkMode = !isDark;
-    setIsDark(newDarkMode);
-    localStorage.setItem("darkMode", newDarkMode.toString());
-    document.documentElement.classList.toggle("dark", newDarkMode);
-  };
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    firstMobileLinkRef.current?.focus();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
 
-  const menuVariants: Variants = {
-    closed: {
-      opacity: 0,
-      height: 0,
-      transition: { duration: 0.3, ease: "easeInOut" }
-    },
-    open: {
-      opacity: 1,
-      height: "auto",
-      transition: { duration: 0.3, ease: "easeInOut", staggerChildren: 0.05, delayChildren: 0.1 }
-    }
-  };
-
-  const itemVariants: Variants = {
-    closed: { opacity: 0, x: -20 },
-    open: { opacity: 1, x: 0 }
-  };
-
-  const logoVariants: Variants = {
-    initial: { opacity: 0, scale: 0.5 },
-    animate: { opacity: 1, scale: 1 },
-    hover: { scale: 1.05, rotate: [0, -5, 5, 0] }
-  };
+    return () => {
+      document.body.style.overflow = overflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isOpen]);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200/20 dark:border-gray-700/20 shadow-lg" 
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
-          {/* Logo */}
-          <motion.div
-            variants={logoVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            transition={{ duration: 0.3 }}
-          >
-            <Link 
-              href="/" 
-              className="flex items-center space-x-2 group"
-              onClick={() => setActiveSection("/")}
-            >
-              <div className="relative">
-                <motion.div
-                  className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg"
-                  whileHover={{ rotate: 180 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <span className="text-white font-bold text-lg">A</span>
-                </motion.div>
-                <motion.div
-                  className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg opacity-20 blur-sm"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              </div>
-              <div className="hidden sm:block">
-                <motion.h1 
-                  className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  Abhijeet
-                </motion.h1>
-                <motion.p 
-                  className="text-xs text-gray-500 dark:text-gray-400 -mt-1"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  Full Stack Developer
-                </motion.p>
-              </div>
-            </Link>
-          </motion.div>
+    <MotionConfig reducedMotion="user">
+      <header
+        // backdrop-filter makes the header the containing block for its fixed children, which
+        // would clip the full-screen menu backdrop, so the open menu uses an opaque bar instead.
+        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+          isOpen
+            ? "bg-gray-950 border-b border-white/10"
+            : isScrolled
+              ? "bg-gray-950/80 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/20"
+              : "bg-transparent border-b border-transparent"
+        }`}
+      >
+        <nav
+          aria-label="Primary"
+          className="mx-auto flex h-[var(--nav-height)] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
+        >
+          <Link href="/" className="group flex items-center gap-3 rounded-lg" aria-label={`${SITE.name}, home`}>
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-bold text-white shadow-lg shadow-indigo-500/30 transition-transform duration-300 group-hover:scale-105">
+              A
+            </span>
+            <span className="hidden sm:flex flex-col leading-tight">
+              <span className="text-base font-semibold text-white">{SITE.shortName}</span>
+              <span className="text-xs text-gray-400">{SITE.role}</span>
+            </span>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navItems.map((item, index) => {
-              const Icon = item.icon;
+          <ul className="hidden lg:flex items-center gap-1">
+            {NAV_ITEMS.map((item) => {
+              const active = isActivePath(pathname, item.href);
               return (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
+                <li key={item.href} className="relative">
                   <Link
                     href={item.href}
-                    onClick={() => setActiveSection(item.href)}
-                    className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 group flex items-center space-x-2 ${
-                      activeSection === item.href
-                        ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                        : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                    aria-current={active ? "page" : undefined}
+                    className={`relative z-10 block rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                      active ? "text-white" : "text-gray-400 hover:text-white"
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.label}</span>
-                    {activeSection === item.href && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                    />
+                    {item.label}
                   </Link>
-                </motion.div>
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-lg bg-white/10 ring-1 ring-white/10"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                </li>
               );
             })}
-          </div>
+          </ul>
 
-          {/* Right Side Actions */}
-          <div className="flex items-center space-x-3">
-            {/* Social Links - Desktop Only */}
-            <div className="hidden lg:flex items-center space-x-2">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <motion.a
-                    key={social.href}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-200"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </motion.a>
-                );
-              })}
-            </div>
-
-            {/* Dark Mode Toggle */}
-            <motion.button
-              onClick={toggleDarkMode}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-200"
-              aria-label="Toggle dark mode"
-            >
-              <AnimatePresence mode="wait">
-                {isDark ? (
-                  <motion.div
-                    key="sun"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Sun className="w-5 h-5" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="moon"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Moon className="w-5 h-5" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
-
-            {/* CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
-              className="hidden sm:block"
-            >
-              <Link
-                href="/contact"
-                className="relative px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl hover:shadow-blue-500/25 transition-all duration-300 overflow-hidden group"
+          <div className="flex items-center gap-1 sm:gap-2">
+            {SOCIALS.map(({ href, label, icon: Icon }) => (
+              <a
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${label} (opens in a new tab)`}
+                className="hidden lg:inline-flex rounded-lg p-2 text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
               >
-                <span className="relative z-10">Let&#39;s Talk</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-                <motion.div
-                  className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-                />
-              </Link>
-            </motion.div>
+                <Icon aria-hidden="true" className="h-[18px] w-[18px]" />
+              </a>
+            ))}
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              onClick={toggleMenu}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="md:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-200"
-              aria-label="Toggle menu"
+            <Link
+              href="/contact"
+              className="hidden sm:inline-flex ml-1 items-center rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition-all hover:from-indigo-500 hover:to-purple-500 hover:shadow-indigo-500/30"
             >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
-          </div>
-        </div>
+              Let&apos;s Talk
+            </Link>
 
-        {/* Mobile Menu */}
+            <button
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setIsOpen((open) => !open)}
+              aria-expanded={isOpen}
+              aria-controls={MOBILE_MENU_ID}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="lg:hidden rounded-lg p-2 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              {isOpen ? <X aria-hidden="true" className="h-6 w-6" /> : <Menu aria-hidden="true" className="h-6 w-6" />}
+            </button>
+          </div>
+        </nav>
+
         <AnimatePresence>
           {isOpen && (
-            <motion.div
-              variants={menuVariants}
-              initial="closed"
-              animate="open"
-              exit="closed"
-              className="md:hidden overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-lg border border-gray-200 dark:border-gray-700 my-2"
-            >
-              <div className="px-4 py-6 space-y-4">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <motion.div key={item.href} variants={itemVariants}>
-                      <Link
-                        href={item.href}
-                        onClick={() => {
-                          setActiveSection(item.href);
-                          setIsOpen(false);
-                        }}
-                        className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                          activeSection === item.href
-                            ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                            : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50"
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-
-                {/* Mobile Social Links */}
-                <motion.div variants={itemVariants} className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center justify-center space-x-6">
-                    {socialLinks.map((social) => {
-                      const Icon = social.icon;
-                      return (
-                        <motion.a
-                          key={social.href}
-                          href={social.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="p-3 rounded-full text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all duration-200"
-                          aria-label={social.label}
+            <>
+              <motion.div
+                key="backdrop"
+                aria-hidden="true"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={closeMenu}
+                className="lg:hidden fixed inset-0 top-[var(--nav-height)] bg-black/60 backdrop-blur-sm"
+              />
+              <motion.div
+                key="panel"
+                id={MOBILE_MENU_ID}
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="lg:hidden absolute inset-x-0 top-full border-b border-white/10 bg-gray-950 shadow-2xl shadow-black/50"
+              >
+                <ul className="mx-auto max-w-7xl space-y-1 px-4 py-4 sm:px-6">
+                  {NAV_ITEMS.map((item, index) => {
+                    const active = isActivePath(pathname, item.href);
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          ref={index === 0 ? firstMobileLinkRef : undefined}
+                          href={item.href}
+                          onClick={closeMenu}
+                          aria-current={active ? "page" : undefined}
+                          className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                            active ? "bg-white/10 text-white" : "text-gray-300 hover:bg-white/5 hover:text-white"
+                          }`}
                         >
-                          <Icon className="w-5 h-5" />
-                        </motion.a>
-                      );
-                    })}
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 border-t border-white/10 px-4 py-4 sm:px-6">
+                  <div className="flex gap-2">
+                    {SOCIALS.map(({ href, label, icon: Icon }) => (
+                      <a
+                        key={href}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${label} (opens in a new tab)`}
+                        className="rounded-lg p-2.5 text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+                      >
+                        <Icon aria-hidden="true" className="h-5 w-5" />
+                      </a>
+                    ))}
                   </div>
-                </motion.div>
-
-                {/* Mobile CTA Button */}
-                <motion.div variants={itemVariants} className="pt-4">
                   <Link
                     href="/contact"
-                    onClick={() => setIsOpen(false)}
-                    className="block w-full text-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                    onClick={closeMenu}
+                    className="sm:hidden rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-2.5 text-sm font-semibold text-white"
                   >
-                    Let&#39;s Talk
+                    Let&apos;s Talk
                   </Link>
-                </motion.div>
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
-      </div>
-
-      {/* Background blur overlay for mobile menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-sm -z-10"
-            onClick={() => setIsOpen(false)}
-          />
-        )}
-      </AnimatePresence>
-    </motion.nav>
+      </header>
+    </MotionConfig>
   );
 }

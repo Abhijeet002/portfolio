@@ -1,28 +1,36 @@
 import type { Metadata } from "next";
+import { Download } from "lucide-react";
+import PageShell from "@/components/PageShell";
+import PageHeader from "@/components/PageHeader";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
 import { EXPERIENCE } from "@/data/experience";
+import { SITE } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Experience | Abhijeet",
+  title: "Experience",
   description:
     "Abhijeet Sachan's professional experience: Frontend Developer at Stack-It building Nestys, and Web Developer at Srstha Tech Solutions.",
 };
 
 export default function ExperiencePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white">
-      <section aria-labelledby="experience-heading" className="max-w-5xl mx-auto px-6 pt-32 pb-20">
-        <header className="text-center mb-16">
-          <h1 id="experience-heading" className="text-4xl md:text-5xl font-bold mb-6">
-            Experience Journey
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            My professional journey and the experiences that shaped my expertise.
-          </p>
-        </header>
+    <PageShell width="5xl">
+      <PageHeader
+        eyebrow="Career"
+        title="Experience Journey"
+        description="My professional journey and the experiences that shaped my expertise."
+      >
+        <a
+          href={SITE.resumePath}
+          download
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-3 font-semibold text-white shadow-lg shadow-indigo-600/20 transition-all hover:from-indigo-500 hover:to-purple-500"
+        >
+          <Download aria-hidden="true" className="h-5 w-5" />
+          Download resume
+        </a>
+      </PageHeader>
 
-        <ExperienceTimeline items={EXPERIENCE} />
-      </section>
-    </div>
+      <ExperienceTimeline items={EXPERIENCE} headingLevel="h2" />
+    </PageShell>
   );
 }

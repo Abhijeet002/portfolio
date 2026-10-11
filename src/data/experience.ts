@@ -70,3 +70,8 @@ export const EXPERIENCE: TimelineEntry[] = [
     ],
   },
 ];
+
+export const WORK_EXPERIENCE = EXPERIENCE.filter((entry) => entry.kind === "work");
+
+/** The role with no end date, if any. */
+export const CURRENT_ROLE = WORK_EXPERIENCE.find((entry) => !entry.end);

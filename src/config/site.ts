@@ -3,6 +3,17 @@
  * so a change (new email, new handle) is a one-line edit instead of a search-and-replace.
  */
 
+/**
+ * Absolute site URL, used to build share-preview (Open Graph) links. An explicit
+ * NEXT_PUBLIC_SITE_URL wins; otherwise use the production domain Vercel injects at build time,
+ * so previews never point at localhost in production.
+ */
+function resolveSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return "http://localhost:3000";
+}
+
 export const SITE = {
   name: "Abhijeet Sachan",
   shortName: "Abhijeet",
@@ -11,7 +22,7 @@ export const SITE = {
   location: "Noida, India",
   email: "abhijeetsachanwork@gmail.com",
   resumePath: "/Abhijeet_Resume.pdf",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url: resolveSiteUrl(),
   /** dev.to username, used to pull published articles into /blog. */
   devToUsername: "abhijeet_sachan_34f5d10dc",
 } as const;

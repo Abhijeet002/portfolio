@@ -48,3 +48,16 @@ body {
   outline-offset: 3px;
   border-radius: 6px;
 }
+
+/* Logo cursor: a slow, terminal-style blink. Off for anyone who prefers reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .logo-cursor-blink {
+    animation: logo-cursor-blink 1.2s steps(1, end) infinite;
+  }
+}
+
+@keyframes logo-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Github, Linkedin, Mail, PenLine } from "lucide-react";
 import BackToTop from "./BackToTop";
+import LogoMark from "./brand/Logo";
 import { NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/config/site";
 
 const SOCIALS = [
@@ -21,9 +22,12 @@ export default function Footer() {
       />
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-[1.5fr_1fr_1fr] lg:px-8">
         <div className="space-y-4">
-          <p className="text-2xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            {SITE.name}
-          </p>
+          <Link href="/" className="inline-flex items-center gap-3 rounded-lg" aria-label={`${SITE.name}, home`}>
+            <LogoMark size={36} />
+            <span className="text-2xl font-bold bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
+              {SITE.name}
+            </span>
+          </Link>
           <p className="max-w-sm text-sm leading-relaxed text-gray-400">{SITE.tagline}</p>
         </div>
 

@@ -68,7 +68,7 @@ export const EXPERIENCE: TimelineEntry[] = [
     end: "2024-10",
     highlights: [
       "Graduated with a CGPA of 8.3/10.",
-      "Relevant coursework: Data Structures & Algorithms, Object-Oriented Programming, Database Management Systems, Operating Systems.",
+      "Self-taught data structures & algorithms, object-oriented programming and software design alongside the ECE curriculum.",
     ],
   },
 ];

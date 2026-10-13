@@ -81,27 +81,29 @@ export default function AboutPage() {
             My story
           </h2>
           <p>
-            I&apos;m a software engineer who builds large-scale, full-stack web applications with React, Next.js
-            and Node.js. I care about clean, maintainable code, reliable systems, and the details that make a product
-            feel fast and effortless to use.
+            I&apos;m a software engineer specialising in large-scale, full-stack web applications. My core stack is
+            React, Next.js, TypeScript and Node.js, and I care most about clean architecture, reliable systems and
+            interfaces that feel fast and effortless to use.
           </p>
           <p>
             {CURRENT_ROLE ? (
               <>
-                Right now I own the frontend architecture of{" "}
-                <span className="font-semibold text-white">{CURRENT_ROLE.product ?? CURRENT_ROLE.organization}</span>{" "}
-                at {CURRENT_ROLE.organization}, a social commerce platform with a social feed, e-commerce, real-time
-                chat, short video and a wallet.
+                At {CURRENT_ROLE.organization} I own the frontend architecture of{" "}
+                <span className="font-semibold text-white">{CURRENT_ROLE.product ?? CURRENT_ROLE.organization}</span>,
+                a social commerce platform spanning a social feed, e-commerce, real-time chat, short video and a
+                digital wallet. Day to day that means designing scalable component systems, building real-time
+                features, and working with product and backend teams from system design through to production.
               </>
             ) : (
-              <>I&apos;m currently open to new frontend and full stack roles.</>
-            )}{" "}
-            Outside of work I build side projects like a blog platform, a real-time support ticket system and a
-            video conferencing app, and I write about what I learn.
+              <>I&apos;m currently open to new software engineering roles.</>
+            )}
           </p>
           <p>
-            I studied Electronics and Communication Engineering at Manipal University Jaipur, with coursework in data
-            structures and algorithms, object-oriented programming, databases and operating systems.
+            My route into software wasn&apos;t a straight line. I graduated in Electronics and Communication
+            Engineering from Manipal University Jaipur, and along the way computer science became my real interest.
+            I taught myself data structures and algorithms, object-oriented programming and software design, then
+            turned that curiosity into a career by building full-stack projects, from a blogging platform to a
+            real-time video conferencing app. I keep sharpening those fundamentals and share what I learn on dev.to.
           </p>
         </Reveal>
       </section>

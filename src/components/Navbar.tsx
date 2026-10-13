@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { Github, Linkedin, Menu, X } from "lucide-react";
 import { NAV_ITEMS, SITE, SOCIAL_LINKS } from "@/config/site";
+import LogoMark from "@/components/brand/Logo";
 
 const SOCIALS = [
   { href: SOCIAL_LINKS.github, label: "GitHub", icon: Github },
@@ -92,9 +93,11 @@ export default function Navbar() {
           className="mx-auto flex h-[var(--nav-height)] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
         >
           <Link href="/" className="group flex items-center gap-3 rounded-lg" aria-label={`${SITE.name}, home`}>
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-bold text-white shadow-lg shadow-indigo-500/30 transition-transform duration-300 group-hover:scale-105">
-              A
-            </span>
+            <LogoMark
+              size={40}
+              animated
+              className="drop-shadow-[0_8px_16px_rgba(99,102,241,0.35)] transition-transform duration-300 group-hover:scale-105"
+            />
             <span className="hidden sm:flex flex-col leading-tight">
               <span className="text-base font-semibold text-white">{SITE.shortName}</span>
               <span className="text-xs text-gray-400">{SITE.role}</span>

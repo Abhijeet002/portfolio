@@ -42,5 +42,17 @@ All content lives in plain data files, so updating the site never means touching
 
 | Variable               | Purpose                                                        |
 | ---------------------- | -------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical site URL, used for Open Graph metadata               |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL for share previews. Defaults to Vercel's production domain |
 | `DEVTO_API_URL`        | Override the dev.to API base (e.g. a local mock for testing)   |
+
+## Logo and icons
+
+The logo mark is defined once in `src/components/brand/mark.ts` and mirrored in `src/app/icon.svg`
+(a unit test keeps the two in sync). After changing it, regenerate the favicon, Apple touch icon and
+PWA icons with:
+
+```bash
+npm run brand:icons
+```
+
+The social share image is rendered from code in `src/app/opengraph-image.tsx`.

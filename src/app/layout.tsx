@@ -17,10 +17,10 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     title: `${SITE.name} | ${SITE.role}`,
     description: SITE.tagline,
-    images: ["/Profile.jpg"],
+    // The image comes from src/app/opengraph-image.tsx.
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: `${SITE.name} | ${SITE.role}`,
     description: SITE.tagline,
   },

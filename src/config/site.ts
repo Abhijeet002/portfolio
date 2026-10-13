@@ -19,7 +19,7 @@ export const SITE = {
   shortName: "Abhijeet",
   role: "Software Engineer",
   tagline: "Software engineer building large-scale, full-stack web apps with React, Next.js and Node.js.",
-  location: "Noida, India",
+  location: "Kanpur, Uttar Pradesh, India",
   email: "abhijeetsachanwork@gmail.com",
   resumePath: "/Abhijeet_Resume.pdf",
   url: resolveSiteUrl(),
